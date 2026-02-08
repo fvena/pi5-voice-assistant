@@ -31,7 +31,7 @@ if [ ! -f "$LLM_FILE" ]; then
     fi
 
     echo "    Descargando modelo LLM (~1.3 GB)..."
-    huggingface-cli download bartowski/Qwen_Qwen3-1.7B-GGUF \
+    "$VENV_PATH/bin/huggingface-cli" download bartowski/Qwen_Qwen3-1.7B-GGUF \
         --include "Qwen_Qwen3-1.7B-Q4_K_M.gguf" \
         --local-dir ./models
 
