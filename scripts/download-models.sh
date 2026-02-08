@@ -25,15 +25,20 @@ if [ ! -f "$LLM_FILE" ]; then
     source "$VENV_PATH/bin/activate"
 
     # Instalar huggingface-hub si no esta disponible
-    if ! python3 -c "import huggingface_hub" 2>/dev/null; then
+    if ! "$VENV_PATH/bin/python3" -c "import huggingface_hub" 2>/dev/null; then
         echo "    Instalando huggingface-hub..."
-        pip install huggingface-hub
+        "$VENV_PATH/bin/pip" install huggingface-hub
     fi
 
     echo "    Descargando modelo LLM (~1.3 GB)..."
-    "$VENV_PATH/bin/huggingface-cli" download bartowski/Qwen_Qwen3-1.7B-GGUF \
-        --include "Qwen_Qwen3-1.7B-Q4_K_M.gguf" \
-        --local-dir ./models
+    "$VENV_PATH/bin/python3" -c "
+from huggingface_hub import snapshot_download
+snapshot_download(
+    repo_id='bartowski/Qwen_Qwen3-1.7B-GGUF',
+    allow_patterns=['Qwen_Qwen3-1.7B-Q4_K_M.gguf'],
+    local_dir='./models',
+)
+"
 
     if [ -f "$LLM_FILE" ]; then
         SIZE=$(du -h "$LLM_FILE" | cut -f1)
